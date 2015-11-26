@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateAccountActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/createAccountButton">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/createAccountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lets start by creating your account..."
+                android:textSize="12dp"
+                android:textStyle="italic"
+                android:textColor="@color/offwhite"
+                android:background="#0000"
+                android:layout_marginLeft="5dp"/>
+
+            <EditText
+                android:id="@+id/createAccountFirstName"
+                android:layout_width="275dp"
+                android:layout_height="40dp"
+                android:hint="First Name"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="14dp"
+                android:textStyle="italic"
+                android:textColor="@color/white"
+                android:inputType="textPersonName"
+                android:background="@drawable/start_field"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <EditText
+                android:id="@+id/createAccountLastName"
+                android:layout_width="275dp"
+                android:layout_height="40dp"
+                android:hint="Last Name"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="14dp"
+                android:textStyle="italic"
+                android:textColor="@color/white"
+                android:inputType="textPersonName"
+                android:background="@drawable/start_field"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="25dp"/>
+
+            <EditText
+                android:id="@+id/createAccountEmail"
+                android:layout_width="275dp"
+                android:layout_height="40dp"
+                android:hint="Email"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="14dp"
+                android:textStyle="italic"
+                android:textColor="@color/white"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/start_field"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <EditText
+                android:id="@+id/createAccountPhone"
+                android:layout_width="275dp"
+                android:layout_height="40dp"
+                android:hint="Phone Number"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="14dp"
+                android:textStyle="italic"
+                android:textColor="@color/white"
+                android:inputType="phone"
+                android:background="@drawable/start_field"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="25dp"/>
+
+            <EditText
+                android:id="@+id/createAccountPassword"
+                android:layout_width="275dp"
+                android:layout_height="40dp"
+                android:hint="Password"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="14dp"
+                android:textStyle="italic"
+                android:textColor="@color/white"
+                android:inputType="textPassword"
+                android:background="@drawable/start_field"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <EditText
+                android:id="@+id/createAccountPasswordConfirm"
+                android:layout_width="275dp"
+                android:layout_height="40dp"
+                android:hint="Confirm Password"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="14dp"
+                android:textStyle="italic"
+                android:textColor="@color/white"
+                android:inputType="textPassword"
+                android:background="@drawable/start_field"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/createAccountButton"
+        android:layout_width="275dp"
+        android:layout_height="40dp"
+        android:textAllCaps="false"
+        android:text="Create Account"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:background="@drawable/start_button"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:onClick="createAccount"/>
+
+</RelativeLayout>
