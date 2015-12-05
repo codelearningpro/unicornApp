@@ -20,15 +20,18 @@ public class ValidationHelper {
     private static final String EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 
-    public static int validateLogin(String phone, String password){
+    public static int validateLogin(String email, String phone, String password){
         if (phone.length() == 0){
             return 1;
         }
         if (password.length() == 0){
             return 2;
         }
-        if (!isPhoneValid(phone)){
+        if (!isEmailValid(email)){
             return 3;
+        }
+        if (!isPhoneValid(phone)){
+            return 4;
         }
 
         return 0;

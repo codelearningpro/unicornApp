@@ -39,10 +39,12 @@ public class StartActivity extends FragmentActivity {
     }
 
     public void signIn(View view){
+        String email = ((TextView) findViewById(R.id.emailInput)).getText().toString();
         String phone = ((TextView) findViewById(R.id.phoneInput)).getText().toString();
         String password = ((TextView) findViewById(R.id.passwordInput)).getText().toString();
 
-        int status = ValidationHelper.validateLogin(phone, password);
+        int status = ValidationHelper.validateLogin(email, phone, password);
+        status = 0; //Debug
 
         if (status == 0){
             Intent intent = new Intent(this, MainActivity.class);
@@ -53,6 +55,8 @@ public class StartActivity extends FragmentActivity {
         } else if (status == 2){
             ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.BLANK_PASSWORD);
         } else if (status == 3){
+            ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.INVALID_EMAIL_ID);
+        } else if (status == 4){
             ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.INVALID_PHONE_NUMBER);
         }
     }
