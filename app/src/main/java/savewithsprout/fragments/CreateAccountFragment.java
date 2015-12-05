@@ -32,6 +32,7 @@ public class CreateAccountFragment extends Fragment {
         ((TextView)view.findViewById(R.id.createAccountPhone)).setTypeface(light);
         ((TextView)view.findViewById(R.id.createAccountPassword)).setTypeface(light);
         ((TextView)view.findViewById(R.id.createAccountPasswordConfirm)).setTypeface(light);
+        ((TextView)view.findViewById(R.id.createAccountfeedback)).setTypeface(regular);
         ((TextView)view.findViewById(R.id.createAccountButton)).setTypeface(regular);
 
         return view;

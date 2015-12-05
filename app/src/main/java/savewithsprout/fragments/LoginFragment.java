@@ -32,6 +32,7 @@ public class LoginFragment extends Fragment {
         ((TextView)view.findViewById(R.id.logInButton)).setTypeface(regular);
         ((TextView)view.findViewById(R.id.forgotPassButton)).setTypeface(hairline);
         ((TextView)view.findViewById(R.id.signUpButton)).setTypeface(regular);
+        ((TextView)view.findViewById(R.id.loginFeedback)).setTypeface(regular);
 
         return view;
     }
