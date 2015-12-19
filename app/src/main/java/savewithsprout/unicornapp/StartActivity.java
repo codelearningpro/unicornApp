@@ -10,9 +10,18 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import savewithsprout.fragments.CreateAccountFragment;
 import savewithsprout.fragments.LoginFragment;
+import savewithsprout.helpers.HttpsTrustManager;
 import savewithsprout.helpers.MessageHelper;
+import savewithsprout.helpers.NetworkHelper;
 import savewithsprout.helpers.ValidationHelper;
 
 public class StartActivity extends FragmentActivity {
@@ -47,9 +56,33 @@ public class StartActivity extends FragmentActivity {
         status = 0; //Debug
 
         if (status == 0){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            final Intent intent = new Intent(this, MainActivity.class);
+
+            HttpsTrustManager.allowAllSSL();
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url ="https://ec2-52-90-110-28.compute-1.amazonaws.com/SWS/api/customer/SignIn/1/" + email + "/" + password;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            String status = response.replace("\"", "").split(":")[0];
+                            if (status.equals("SUCCESS")){
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            } else if (status.equals("INVALID_SIGNIN")){
+                                ((TextView) findViewById(R.id.loginFeedback)).setText("Username or password don't match");
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ((TextView) findViewById(R.id.loginFeedback)).setText("Something went wrong.");
+                }
+            });
+            queue.add(stringRequest);
+
         } else if (status == 1){
             ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.BLANK_PHONE);
         } else if (status == 2){
@@ -72,9 +105,11 @@ public class StartActivity extends FragmentActivity {
         int status = ValidationHelper.validateCreateAccount(firstName, lastName, email, phone, password, passwordConfirmation);
 
         if (status == 0){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            if (NetworkHelper.checkAccountCreate(firstName, lastName, email, phone, password)) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
         } else if (status == 1){
             ((TextView) findViewById(R.id.createAccountfeedback)).setText(MessageHelper.BLANK_FIRST_NAME);
         } else if (status == 2){
