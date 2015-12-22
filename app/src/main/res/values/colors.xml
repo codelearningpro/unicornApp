@@ -9,4 +9,6 @@
     <color name="alpha">#00ffffff</color>
     <color name="green">#009966</color>
     <color name="hintTextColor">#80FFFFFF</color>
+
+    <color name="grey">#cccccc</color>
 </resources>

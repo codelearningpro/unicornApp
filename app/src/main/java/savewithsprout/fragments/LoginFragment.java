@@ -25,11 +25,14 @@ public class LoginFragment extends Fragment {
         Typeface light = Typeface.createFromAsset(getActivity().getAssets(),  "fonts/Montserrat-Light.ttf");
         Typeface hairline = Typeface.createFromAsset(getActivity().getAssets(),  "fonts/Montserrat-Hairline.ttf");
 
+
+        ((TextView)view.findViewById(R.id.emailInput)).setTypeface(light);
         ((TextView)view.findViewById(R.id.phoneInput)).setTypeface(light);
         ((TextView)view.findViewById(R.id.passwordInput)).setTypeface(light);
         ((TextView)view.findViewById(R.id.logInButton)).setTypeface(regular);
         ((TextView)view.findViewById(R.id.forgotPassButton)).setTypeface(hairline);
         ((TextView)view.findViewById(R.id.signUpButton)).setTypeface(regular);
+        ((TextView)view.findViewById(R.id.loginFeedback)).setTypeface(regular);
 
         return view;
     }
