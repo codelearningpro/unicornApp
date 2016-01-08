@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import savewithsprout.objects.Goal;
+import savewithsprout.objects.Transaction;
 
 /**
  * Created by tmwee on 11/16/2015.
@@ -28,7 +29,7 @@ public class DepositChart extends View {
 
     float targetAmount = 1000;
     int targetDate = 5;
-    ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+    public ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
 
     public DepositChart(Context context){
@@ -187,20 +188,5 @@ public class DepositChart extends View {
         canvas.drawText(week + "", t.date * dateRatio - textPaint.measureText(week + "") / 2, height + heightMargin - weekRadius / 2 - (textPaint.ascent() + textPaint.descent()) / 2, textPaint);
 
         canvas.drawRect(2, 2, canvas.getWidth() - 2, canvas.getHeight() - 2, white);
-    }
-}
-
-class Transaction {
-
-    float amount;
-    int date;
-
-    Transaction(float amount, int date){
-        this.amount = amount;
-        this.date = date;
-    }
-
-    public int getTime(){
-        return date;
     }
 }

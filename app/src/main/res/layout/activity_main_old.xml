@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="savewithsprout.unicornapp.MainActivity"
+android:fitsSystemWindows="true">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/green"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/mainGoalLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Car"
+            android:textColor="@color/offwhite"
+            android:textSize="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="-30dp"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/mainGoalName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3rd Year Tution"
+            android:textColor="@color/offwhite"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/mainGoalRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vacation"
+            android:textColor="@color/offwhite"
+            android:textSize="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="-30dp"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <savewithsprout.mchart.DepositChart
+            android:id="@+id/mainGraph"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/green"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/mainButtonAdd"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="50dp"
+            android:background="@color/alpha"
+            android:text="+"
+            android:textColor="@color/offwhite"
+            android:textSize="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:onClick="increaseDeposit"/>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="40dp"
+            android:background="@color/white"/>
+
+        <Button
+            android:id="@+id/mainButtonDeposit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/alpha"
+            android:textAllCaps="false"
+            android:text="Deposit $23"
+            android:textColor="@color/offwhite"
+            android:textSize="22dp"
+            android:layout_centerInParent="true"/>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:layout_toLeftOf="@+id/mainButtonAdd"/>
+
+        <Button
+            android:id="@+id/mainButtonSub"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@color/alpha"
+            android:text="-"
+            android:textColor="@color/offwhite"
+            android:textSize="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:onClick="decreaseDeposit"/>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/info_holder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/green"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="openSettings">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/setting"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="35dp"
+            android:background="@color/white"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="openNewGoal">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/add"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="35dp"
+            android:background="@color/white"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="openWidthdrawlGoal">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/up"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="35dp"
+            android:background="@color/white"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="openNewReminder">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/clock"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="35dp"
+            android:background="@color/white"/>
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@color/green"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+<ImageView
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:layout_marginLeft="2.5dp"
+    android:background="@drawable/circle"
+    android:layout_gravity="bottom"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentBottom="true" />
+
+<ImageView
+    android:layout_width="54dp"
+    android:layout_height="54dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/profile_picture_outline"
+    android:layout_gravity="bottom"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentBottom="true" />
+
+<ImageView
+    android:layout_width="45dp"
+    android:layout_height="45dp"
+    android:layout_margin="12.5dp"
+    android:background="@drawable/profile_picture"
+    android:layout_gravity="bottom"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentBottom="true" />
+
+<RelativeLayout
+    android:id="@+id/mainFragment"
+    android:layout_width="match_parent"
+    android:layout_height="310dp"
+    android:layout_alignParentBottom="true">
+
+</RelativeLayout>
+
+</RelativeLayout>
+

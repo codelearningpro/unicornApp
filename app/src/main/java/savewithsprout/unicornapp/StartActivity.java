@@ -1,11 +1,8 @@
 package savewithsprout.unicornapp;
 
-import android.app.Activity;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -14,8 +11,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import savewithsprout.fragments.CreateAccountFragment;
 import savewithsprout.fragments.LoginFragment;
@@ -23,6 +24,7 @@ import savewithsprout.helpers.HttpsTrustManager;
 import savewithsprout.helpers.MessageHelper;
 import savewithsprout.helpers.NetworkHelper;
 import savewithsprout.helpers.ValidationHelper;
+import savewithsprout.helpers.WebAPIHelper;
 
 public class StartActivity extends FragmentActivity {
 
@@ -33,15 +35,21 @@ public class StartActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fragment, new LoginFragment());
+        ft.add(R.id.startFragment, new LoginFragment());
         ft.commit();
     }
 
     public void moveToCreateAccount(View view){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-        ft.replace(R.id.fragment, new CreateAccountFragment());
+        ft.replace(R.id.startFragment, new CreateAccountFragment());
         ft.commit();
 
         page = 1;
@@ -53,7 +61,7 @@ public class StartActivity extends FragmentActivity {
         String password = ((TextView) findViewById(R.id.passwordInput)).getText().toString();
 
         int status = ValidationHelper.validateLogin(email, phone, password);
-        status = 0; //Debug
+        //status = 0; //Debug
 
         if (status == 0){
             final Intent intent = new Intent(this, MainActivity.class);
@@ -61,27 +69,26 @@ public class StartActivity extends FragmentActivity {
             HttpsTrustManager.allowAllSSL();
 
             RequestQueue queue = Volley.newRequestQueue(this);
-            String url ="https://ec2-52-90-110-28.compute-1.amazonaws.com/SWS/api/customer/SignIn/1/" + email + "/" + password;
+            String url = WebAPIHelper.createSignInURL(email, password, getResources());
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            String status = response.replace("\"", "").split(":")[0];
-                            if (status.equals("SUCCESS")){
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                            } else if (status.equals("INVALID_SIGNIN")){
-                                ((TextView) findViewById(R.id.loginFeedback)).setText("Username or password don't match");
-                            }
-                        }
-                    }, new Response.ErrorListener() {
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
-                    ((TextView) findViewById(R.id.loginFeedback)).setText("Something went wrong.");
+                public void onResponse(JSONObject response) {
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success){
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        } else {
+                            ((TextView) findViewById(R.id.loginFeedback)).setText("Username or password don't match");
+                        }
+                    } catch (JSONException e) {
+
+                    }
                 }
-            });
-            queue.add(stringRequest);
+            }, null);
+
+            queue.add(jsonRequest);
 
         } else if (status == 1){
             ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.BLANK_PHONE);
@@ -105,11 +112,39 @@ public class StartActivity extends FragmentActivity {
         int status = ValidationHelper.validateCreateAccount(firstName, lastName, email, phone, password, passwordConfirmation);
 
         if (status == 0){
+
+            final Intent intent = new Intent(this, MainActivity.class);
+
+            HttpsTrustManager.allowAllSSL();
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = WebAPIHelper.createCreateAccountURL(firstName, lastName, email, phone, password, getResources());
+
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success){
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        } else {
+                            //((TextView) findViewById(R.id.loginFeedback)).setText("Username or password don't match");
+                        }
+                    } catch (JSONException e) {
+
+                    }
+                }
+            }, null);
+
+            queue.add(jsonRequest);
+
+            /*
             if (NetworkHelper.checkAccountCreate(firstName, lastName, email, phone, password)) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            }
+            }*/
         } else if (status == 1){
             ((TextView) findViewById(R.id.createAccountfeedback)).setText(MessageHelper.BLANK_FIRST_NAME);
         } else if (status == 2){
@@ -150,10 +185,22 @@ public class StartActivity extends FragmentActivity {
         } else if (page == 1){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
-            ft.replace(R.id.fragment, new LoginFragment());
+            ft.replace(R.id.startFragment, new LoginFragment());
             ft.commit();
 
             page = 0;
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        View decorView = getWindow().getDecorView();
+        if (hasFocus) {
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 }

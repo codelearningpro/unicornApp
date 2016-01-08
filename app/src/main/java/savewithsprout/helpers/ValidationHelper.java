@@ -65,7 +65,7 @@ public class ValidationHelper {
         if (isPasswordValid(password) != 0){
             return 9;
         }
-        if (password != passwordConfirm){
+        if (password.equals(passwordConfirm)){
             return 10;
         }
         return 0;
