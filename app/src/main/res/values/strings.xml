@@ -5,5 +5,5 @@
     <string name="title_activity_create_account">CreateAccountActivity</string>
 
     <string name="signin">http://ec2-52-90-110-28.compute-1.amazonaws.com/SWS/api/customer/SignIn/1/</string>
-    <string name="createaccount"></string>
+    <string name="createaccount">http://ec2-52-90-110-28.compute-1.amazonaws.com/SWS/api/customer/CreateCustomer/</string>
 </resources>

@@ -69,7 +69,7 @@ public class StartActivity extends FragmentActivity {
             HttpsTrustManager.allowAllSSL();
 
             RequestQueue queue = Volley.newRequestQueue(this);
-            String url = WebAPIHelper.createSignInURL(email, password, getResources());
+            String url = WebAPIHelper.createSignInURL(email, password, getResources().getString(R.string.signin));
 
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
@@ -118,7 +118,7 @@ public class StartActivity extends FragmentActivity {
             HttpsTrustManager.allowAllSSL();
 
             RequestQueue queue = Volley.newRequestQueue(this);
-            String url = WebAPIHelper.createCreateAccountURL(firstName, lastName, email, phone, password, getResources());
+            String url = WebAPIHelper.createCreateAccountURL(firstName, lastName, email, phone, password, getResources().getString(R.string.createaccount));
 
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
