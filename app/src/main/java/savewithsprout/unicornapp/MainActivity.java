@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +35,23 @@ import savewithsprout.objects.Reminder;
 
 public class MainActivity extends FragmentActivity {
 
+    Handler handler = new Handler();
+    Runnable holdIncrease = new Runnable() {
+        public void run() {
+            deposit += 1;
+            updateDeposit();
+            handler.post(this);
+        }
+    };
+
+    Runnable holdDecrease = new Runnable() {
+        public void run() {
+            deposit -= 1;
+            updateDeposit();
+            handler.post(this);
+        }
+    };
+
     DepositChart depositChart;
 
     private int deposit = 100;
@@ -44,24 +63,6 @@ public class MainActivity extends FragmentActivity {
     RelativeLayout profileImage;
 
     int bottomMargin = 850;
-
-
-    int counter = 0;
-
-    View.OnTouchListener listener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    deposit += 1;
-                    break;
-                case MotionEvent.ACTION_UP:
-                    counter = 0;
-                    break;
-            }
-            return false;
-        }
-    };
 
     Animation moveProfileImage = new Animation() {
         @Override
@@ -165,7 +166,27 @@ public class MainActivity extends FragmentActivity {
 
         updateDeposit();
 
-        //((TextView) findViewById(R.id.mainButtonAdd)).setOnTouchListener(listener);
+        ((TextView) findViewById(R.id.mainButtonAdd)).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    handler.postDelayed(holdIncrease, 500);
+                if((event.getAction() == MotionEvent.ACTION_MOVE)||(event.getAction() == MotionEvent.ACTION_UP))
+                    handler.removeCallbacks(holdIncrease);
+                return false;
+            }
+        });
+
+        ((TextView) findViewById(R.id.mainButtonSub)).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    handler.postDelayed(holdDecrease, 500);
+                if((event.getAction() == MotionEvent.ACTION_MOVE)||(event.getAction() == MotionEvent.ACTION_UP))
+                    handler.removeCallbacks(holdDecrease);
+                return false;
+            }
+        });
         //((TextView) findViewById(R.id.mainButtonSub)).setOnTouchListener(listener);
 
 
@@ -284,4 +305,6 @@ public class MainActivity extends FragmentActivity {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
+
+
 }

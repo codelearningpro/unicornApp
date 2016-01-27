@@ -22,7 +22,7 @@ public class ValidationHelper {
 
     public static int validateLogin(String email, String phone, String password){
         if (phone.length() == 0){
-            return 1;
+            //return 1;
         }
         if (password.length() == 0){
             return 2;
@@ -31,7 +31,7 @@ public class ValidationHelper {
             return 3;
         }
         if (!isPhoneValid(phone)){
-            return 4;
+            //return 4;
         }
 
         return 0;
@@ -65,7 +65,7 @@ public class ValidationHelper {
         if (isPasswordValid(password) != 0){
             return 9;
         }
-        if (password.equals(passwordConfirm)){
+        if (!password.equals(passwordConfirm)){
             return 10;
         }
         return 0;
