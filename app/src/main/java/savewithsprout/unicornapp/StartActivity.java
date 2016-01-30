@@ -46,6 +46,12 @@ public class StartActivity extends FragmentActivity {
         ft.commit();
     }
 
+    public void debugLogin(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
     public void moveToCreateAccount(View view){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);

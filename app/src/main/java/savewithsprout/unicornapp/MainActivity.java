@@ -21,6 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import savewithsprout.fragments.CreateAccountFragment;
 import savewithsprout.fragments.LoginFragment;
 import savewithsprout.fragments.MainAdvisorFragment;
@@ -56,7 +61,12 @@ public class MainActivity extends FragmentActivity {
 
     private int deposit = 100;
 
-    Goal goal = new Goal("Trip to Disneyland", 1200, 28, 100, new Reminder[]{});
+    ArrayList<Goal> goals = new ArrayList<Goal>() {{
+        add(new Goal("Trip to Disneyland", 1200, new GregorianCalendar(2016, 0, 24).getTime(), new GregorianCalendar(2016, 1, 16).getTime(), 100, new ArrayList<Transaction>(), new Reminder[]{}));
+        add(new Goal("Collage Fund Year 1", 5000, new GregorianCalendar(2016, 0, 13).getTime(), new GregorianCalendar(2016, 1, 29).getTime(), 100, new ArrayList<Transaction>(), new Reminder[]{}));
+        add(new Goal("New Car", 14500, new GregorianCalendar(2016, 0, 02).getTime(), new GregorianCalendar(2016, 3, 25).getTime(), 200, new ArrayList<Transaction>(), new Reminder[]{}));
+    }};
+    int openedGoal = 0;
 
     int page = 0;
 
@@ -110,8 +120,8 @@ public class MainActivity extends FragmentActivity {
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        //((DepositChart)(findViewById(R.id.mainGraph))).setGoal(goal);
-        ((TextView) findViewById(R.id.mainGoalName)).setText(goal.name);
+        ((TextView) findViewById(R.id.mainGoalName)).setText(goals.get(openedGoal).name);
+        ((DepositChart)(findViewById(R.id.mainGraph))).setGoal(goals.get(openedGoal));
 
         LinearLayout holder = (LinearLayout) findViewById(R.id.info_holder);
         RelativeLayout view = (RelativeLayout) getLayoutInflater().inflate(R.layout.goal_info, null);
@@ -192,6 +202,24 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    public void changeGoalLeft(View view){
+        if (openedGoal > 0){
+            openedGoal -= 1;
+        }
+        ((TextView) findViewById(R.id.mainGoalName)).setText(goals.get(openedGoal).name);
+        ((DepositChart)(findViewById(R.id.mainGraph))).setGoal(goals.get(openedGoal));
+        ((DepositChart)(findViewById(R.id.mainGraph))).invalidate();
+    }
+
+    public void changeGoalRight(View view){
+        if (openedGoal < goals.size() - 1){
+            openedGoal += 1;
+        }
+        ((TextView) findViewById(R.id.mainGoalName)).setText(goals.get(openedGoal).name);
+        ((DepositChart)(findViewById(R.id.mainGraph))).setGoal(goals.get(openedGoal));
+        ((DepositChart)(findViewById(R.id.mainGraph))).invalidate();
+    }
+
     public void increaseDeposit(View view){
         deposit += 1;
         updateDeposit();
@@ -203,7 +231,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void deposit(View view){
-        depositChart.transactions.add(new Transaction(deposit, depositChart.transactions.size() + 1));
+        goals.get(openedGoal).transactions.add(new Transaction(deposit, new Date()));
+        depositChart.setGoal(goals.get(openedGoal));
         depositChart.invalidate();
     }
 

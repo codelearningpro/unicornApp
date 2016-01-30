@@ -28,8 +28,9 @@ public class DepositChart extends View {
     Goal goal;
 
     float targetAmount = 1000;
-    int targetDate = 5;
     public ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+    Date start = new Date();
+    Date end = new Date();
 
 
     public DepositChart(Context context){
@@ -51,142 +52,150 @@ public class DepositChart extends View {
     }
 
     public void init(){
-        transactions.add(new Transaction(100, 1));
-        transactions.add(new Transaction(100, 2));
-        transactions.add(new Transaction(200, 3));
+        transactions.add(new Transaction(100, new Date()));
     }
 
     public void setGoal(Goal goal){
         this.goal = goal;
 
         targetAmount = goal.getAmount();
-        targetDate = goal.getTerm() * 7;
+        start = goal.start;
+        end = goal.end;
+        transactions = goal.transactions;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        float width = canvas.getWidth();
-        float height = canvas.getHeight() * 0.9f;
-        float heightMargin = canvas.getHeight() * 0.1f;
 
-        float amountRatio = height / targetAmount;
-        float dateRatio = width / targetDate;
+        if (transactions.size() > 0) {
 
-        Paint white = new Paint();
-        white.setColor(Color.WHITE);
+            float width = canvas.getWidth();
+            float height = canvas.getHeight() * 0.9f;
+            float heightMargin = canvas.getHeight() * 0.1f;
 
-        Paint grey = new Paint();
-        grey.setARGB(255, 204, 204, 204);
+            float amountRatio = height / targetAmount;
+            float dateRatio = width / getSecondsBetween(start, end);
 
-        Paint green = new Paint();
-        green.setARGB(255, 0, 153, 102);
+            Paint white = new Paint();
+            white.setColor(Color.WHITE);
 
-        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), grey);
+            Paint grey = new Paint();
+            grey.setARGB(255, 204, 204, 204);
 
-        //Fill UnDone
+            Paint green = new Paint();
+            green.setARGB(255, 0, 153, 102);
 
-        Path goalPath = new Path();
-        goalPath.setFillType(Path.FillType.EVEN_ODD);
-        goalPath.moveTo(0, (int) (height + heightMargin));
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), grey);
 
-        int total = 0;
-        for (int i = 0; i < transactions.size(); i++){
-            Transaction t = transactions.get(i);
-            goalPath.lineTo((int) (t.date * dateRatio), (int) (height + heightMargin - t.amount * amountRatio) - total);
-            total += t.amount * amountRatio;
-        }
+            //Fill UnDone
 
-        goalPath.lineTo(width, heightMargin);
-        goalPath.lineTo(width, (int) (height + heightMargin));
-        goalPath.lineTo(0, (int) (height + heightMargin));
+            Path goalPath = new Path();
+            goalPath.setFillType(Path.FillType.EVEN_ODD);
+            goalPath.moveTo(0, (int) (height + heightMargin));
 
-        Paint shader = new Paint();
-        shader.setARGB(32, 0, 0, 0);
-        canvas.drawPath(goalPath, shader);
-
-        white.setStyle(Paint.Style.STROKE);
-        white.setStrokeWidth(4);
-
-        canvas.drawPath(goalPath, white);
-
-        //Fill Done
-
-        Path goalDone = new Path();
-        goalDone.setFillType(Path.FillType.EVEN_ODD);
-        goalDone.moveTo(0, (int) (height + heightMargin));
-
-        total = 0;
-        for (int i = 0; i < transactions.size(); i++){
-            Transaction t = transactions.get(i);
-            goalDone.lineTo((int) (t.date * dateRatio), (int) (height + heightMargin - t.amount * amountRatio) - total);
-            total += t.amount * amountRatio;
-
-            if (i == transactions.size() - 1){
-                goalDone.lineTo((int) (t.date * dateRatio), (int) (height + heightMargin));
-            }
-        }
-
-        goalDone.lineTo(0, (int) (height + heightMargin));
-
-        Transaction lastT = transactions.get(transactions.size() - 1);
-
-        Paint gradient = new Paint();
-        gradient.setShader(new LinearGradient(0, height + heightMargin, lastT.date * dateRatio, height - lastT.amount * amountRatio, Color.rgb(41, 139, 226), Color.rgb(34, 181, 115), Shader.TileMode.MIRROR));
-        canvas.drawPath(goalDone, gradient);
-
-        white.setStyle(Paint.Style.STROKE);
-        white.setStrokeWidth(4);
-        canvas.drawPath(goalDone, white);
-
-        white.setStrokeWidth(1);
-        white.setStyle(Paint.Style.FILL);
-
-        total = 0;
-        for (int i = 0; i < transactions.size(); i++){
-            Transaction t = transactions.get(i);
-
-            if (i == transactions.size() - 1){
-                canvas.drawCircle(t.date * dateRatio, height + heightMargin - t.amount * amountRatio - total, 15, white);
-                canvas.drawCircle(t.date * dateRatio, height + heightMargin - t.amount * amountRatio - total, 10, green);
-            } else {
-                canvas.drawCircle(t.date * dateRatio, height + heightMargin - t.amount * amountRatio - total, 10, white);
-                canvas.drawCircle(t.date * dateRatio, height + heightMargin - t.amount * amountRatio - total, 5, green);
+            int total = 0;
+            for (int i = 0; i < transactions.size(); i++) {
+                Transaction t = transactions.get(i);
+                goalPath.lineTo((int) (getSecondsBetween(start, t.date) * dateRatio), (int) (height + heightMargin - t.amount * amountRatio) - total);
+                total += t.amount * amountRatio;
             }
 
-            total += t.amount * amountRatio;
+            goalPath.lineTo(width, heightMargin);
+            goalPath.lineTo(width, (int) (height + heightMargin));
+            goalPath.lineTo(0, (int) (height + heightMargin));
+
+            Paint shader = new Paint();
+            shader.setARGB(32, 0, 0, 0);
+            canvas.drawPath(goalPath, shader);
+
+            white.setStyle(Paint.Style.STROKE);
+            white.setStrokeWidth(4);
+
+            canvas.drawPath(goalPath, white);
+
+            //Fill Done
+
+            Path goalDone = new Path();
+            goalDone.setFillType(Path.FillType.EVEN_ODD);
+            goalDone.moveTo(0, (int) (height + heightMargin));
+
+            total = 0;
+            for (int i = 0; i < transactions.size(); i++) {
+                Transaction t = transactions.get(i);
+                goalDone.lineTo((int) (getSecondsBetween(start, t.date) * dateRatio), (int) (height + heightMargin - t.amount * amountRatio) - total);
+                total += t.amount * amountRatio;
+
+                if (i == transactions.size() - 1) {
+                    goalDone.lineTo((int) (getSecondsBetween(start, t.date) * dateRatio), (int) (height + heightMargin));
+                }
+            }
+
+            goalDone.lineTo(0, (int) (height + heightMargin));
+
+            Transaction lastT = transactions.get(transactions.size() - 1);
+
+            Paint gradient = new Paint();
+            gradient.setShader(new LinearGradient(0, height + heightMargin, getSecondsBetween(start, lastT.date) * dateRatio, height - lastT.amount * amountRatio, Color.rgb(41, 139, 226), Color.rgb(34, 181, 115), Shader.TileMode.MIRROR));
+            canvas.drawPath(goalDone, gradient);
+
+            white.setStyle(Paint.Style.STROKE);
+            white.setStrokeWidth(4);
+            canvas.drawPath(goalDone, white);
+
+            white.setStrokeWidth(1);
+            white.setStyle(Paint.Style.FILL);
+
+            total = 0;
+            for (int i = 0; i < transactions.size(); i++) {
+                Transaction t = transactions.get(i);
+
+                if (i == transactions.size() - 1) {
+                    canvas.drawCircle(getSecondsBetween(start, t.date) * dateRatio, height + heightMargin - t.amount * amountRatio - total, 15, white);
+                    canvas.drawCircle(getSecondsBetween(start, t.date) * dateRatio, height + heightMargin - t.amount * amountRatio - total, 10, green);
+                } else {
+                    canvas.drawCircle(getSecondsBetween(start, t.date) * dateRatio, height + heightMargin - t.amount * amountRatio - total, 10, white);
+                    canvas.drawCircle(getSecondsBetween(start, t.date) * dateRatio, height + heightMargin - t.amount * amountRatio - total, 5, green);
+                }
+
+                total += t.amount * amountRatio;
+            }
+
+            //Outline Around
+
+            white.setStyle(Paint.Style.STROKE);
+            white.setStrokeWidth(4);
+
+            //Marker
+
+            int weekRadius = 50;
+
+            Transaction t = transactions.get(transactions.size() - 1);
+            canvas.drawCircle(getSecondsBetween(start, t.date) * dateRatio, height + heightMargin, weekRadius, green);
+
+            canvas.drawCircle(getSecondsBetween(start, t.date) * dateRatio, height + heightMargin, weekRadius, white);
+
+            Path textPath = new Path();
+            textPath.addArc(new RectF(getSecondsBetween(start, t.date) * dateRatio - weekRadius * 1.2f, height + heightMargin - weekRadius * 1.2f, getSecondsBetween(start, t.date) * dateRatio + weekRadius * 1.2f, height + heightMargin + weekRadius * 1.2f), 185, 265);
+
+            Paint textPaint = new Paint();
+
+
+            Typeface regular = Typeface.createFromAsset(context.getAssets(), "fonts/Montserrat-Regular.ttf");
+            textPaint.setTypeface(regular);
+            textPaint.setTextSize(24);
+            textPaint.setColor(Color.WHITE);
+            canvas.drawTextOnPath("WEEK", textPath, 0, 0, textPaint);
+
+            int week = 3;
+
+            textPaint.setTextSize(35);
+            canvas.drawText(week + "", getSecondsBetween(start, t.date) * dateRatio - textPaint.measureText(week + "") / 2, height + heightMargin - weekRadius / 2 - (textPaint.ascent() + textPaint.descent()) / 2, textPaint);
+
+            canvas.drawRect(2, 2, canvas.getWidth() - 2, canvas.getHeight() - 2, white);
         }
+    }
 
-        //Outline Around
-
-        white.setStyle(Paint.Style.STROKE);
-        white.setStrokeWidth(4);
-
-        //Marker
-
-        int weekRadius = 50;
-
-        Transaction t = transactions.get(transactions.size() - 1);
-        canvas.drawCircle(t.date * dateRatio, height + heightMargin, weekRadius, green);
-
-        canvas.drawCircle(t.date * dateRatio, height + heightMargin, weekRadius, white);
-
-        Path textPath = new Path();
-        textPath.addArc(new RectF(t.date * dateRatio - weekRadius * 1.2f, height + heightMargin - weekRadius * 1.2f, t.date * dateRatio + weekRadius * 1.2f, height + heightMargin + weekRadius * 1.2f), 185, 265);
-
-        Paint textPaint = new Paint();
-
-
-        Typeface regular = Typeface.createFromAsset(context.getAssets(),  "fonts/Montserrat-Regular.ttf");
-        textPaint.setTypeface(regular);
-        textPaint.setTextSize(24);
-        textPaint.setColor(Color.WHITE);
-        canvas.drawTextOnPath("WEEK", textPath, 0, 0, textPaint);
-
-        int week = 3;
-
-        textPaint.setTextSize(35);
-        canvas.drawText(week + "", t.date * dateRatio - textPaint.measureText(week + "") / 2, height + heightMargin - weekRadius / 2 - (textPaint.ascent() + textPaint.descent()) / 2, textPaint);
-
-        canvas.drawRect(2, 2, canvas.getWidth() - 2, canvas.getHeight() - 2, white);
+    public long getSecondsBetween(Date d1, Date d2){
+        return (d2.getTime() - d1.getTime()) / 1000;
     }
 }

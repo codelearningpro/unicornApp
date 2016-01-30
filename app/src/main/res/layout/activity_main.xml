@@ -61,13 +61,15 @@
                     android:layout_width="75dp"
                     android:layout_height="50dp"
                     android:background="@drawable/gradient_main_trans_left"
-                    android:layout_alignParentLeft="true"/>
+                    android:layout_alignParentLeft="true"
+                    android:onClick="changeGoalLeft"/>
 
                 <View
                     android:layout_width="75dp"
                     android:layout_height="50dp"
                     android:background="@drawable/gradient_main_trans_right"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true"
+                    android:onClick="changeGoalRight"/>
 
                 <ImageView
                     android:layout_width="15dp"
