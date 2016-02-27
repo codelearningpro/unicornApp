@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -132,10 +133,16 @@ public class StartActivity extends FragmentActivity {
                     try {
                         boolean success = response.getBoolean("success");
                         if (success){
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            Toast.makeText(getApplicationContext(), "Please check your email and activate the link.", Toast.LENGTH_LONG).show();
+
+                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
+                            ft.replace(R.id.startFragment, new LoginFragment());
+                            ft.commit();
+
+                            page = 0;
                         } else {
-                            //((TextView) findViewById(R.id.loginFeedback)).setText("Username or password don't match");
+                            Toast.makeText(getApplicationContext(), "Unable to register new account, please contact support", Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
 
@@ -201,12 +208,6 @@ public class StartActivity extends FragmentActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        View decorView = getWindow().getDecorView();
-        if (hasFocus) {
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
+
     }
 }
