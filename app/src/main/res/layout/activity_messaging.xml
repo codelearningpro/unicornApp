@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="savewithsprout.messaging.MessagingActivity"
+    android:orientation="vertical"
+    android:layout_weight="1"
+    android:background="@color/lightgrey">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/messageList"
+        android:divider="@color/offwhite"
+        android:dividerHeight="0px"
+        android:paddingBottom="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/messageInput"
+        android:background="@color/white"
+        android:hint="Send message..."
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:inputType="text"
+        android:imeOptions="actionSend"/>
+</LinearLayout>

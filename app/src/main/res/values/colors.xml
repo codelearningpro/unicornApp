@@ -12,6 +12,7 @@
     <color name="red">#c20c06</color>
     <color name="hintTextColor">#80FFFFFF</color>
 
+    <color name="lightgrey">#eeeeee</color>
     <color name="grey">#cccccc</color>
     <color name="darkgrey">#777777</color>
 </resources>

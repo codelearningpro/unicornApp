@@ -26,6 +26,7 @@ import savewithsprout.helpers.MessageHelper;
 import savewithsprout.helpers.NetworkHelper;
 import savewithsprout.helpers.ValidationHelper;
 import savewithsprout.helpers.WebAPIHelper;
+import savewithsprout.messaging.MessagingActivity;
 
 public class StartActivity extends FragmentActivity {
 
@@ -48,7 +49,7 @@ public class StartActivity extends FragmentActivity {
     }
 
     public void debugLogin(View view){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MessagingActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
@@ -103,7 +104,7 @@ public class StartActivity extends FragmentActivity {
             ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.BLANK_PASSWORD);
         } else if (status == 3){
             ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.INVALID_EMAIL_ID);
-        } else if (status == 4){
+        } else if (status == 4) {
             ((TextView) findViewById(R.id.loginFeedback)).setText(MessageHelper.INVALID_PHONE_NUMBER);
         }
     }
